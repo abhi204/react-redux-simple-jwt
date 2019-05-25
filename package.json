@@ -1,0 +1,33 @@
+{
+  "name": "react-redux-simple-jwt",
+  "version": "0.1.0",
+  "description": "A dead simple Redux-Middleware for JWT Authentication in React applications",
+  "author": "Abhi Chaurasia",
+  "license": "MIT",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhi204/react-redux-simple-jwt.git"
+  },
+  "keywords": [
+    "react",
+    "react-redux",
+    "jwt",
+    "redux-middleware"
+  ],
+  "bugs": {
+    "url": "https://github.com/abhi204/react-redux-simple-jwt/issues"
+  },
+  "homepage": "https://github.com/abhi204/react-redux-simple-jwt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
