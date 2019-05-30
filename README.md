@@ -62,7 +62,7 @@ The main problem is to include access token in this request's header. This is be
 
 In order to use R2SJ, action creator must return a ***request-object***. This object includes all the necessary details required by R2SJ middleware to create the request. The best thing about this is that refreshing and attaching access token to request header is now managed by R2SJ itself.
 Request is made  and the response is dispatched to reducers.
-**(R2SJ can also pass the server response to a function instead. [See Here](#Passing_response_to_function_instead_of_reducers) )**
+**(R2SJ can also pass the server response to a function instead. [See Here](#passing-response-to-function-instead-of-reducers) )**
 ##### Example Scenerio
 * *Without R2SJ (Using redux thunk)*
 ```js
@@ -187,6 +187,9 @@ function doLogin(username, password){
 
 ---
 **author: https://github.com/abhi204**
+
 **repository: https://github.com/abhi204/react-redux-simple-jwt**
+
 **issues: https://github.com/abhi204/react-redux-simple-jwt/issues**
+
 ###### License : **MIT**
