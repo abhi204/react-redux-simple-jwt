@@ -6,21 +6,22 @@ var cookieHelper = require('./helpers/CookieHelper');
 var axios = require('axios');
 
 var CreateJwtMiddleware = ( configs ) => {
-    let refresh_endpoint = configs.refresh_endpoint;
+    let refresh_endpoint = configs.refreshEndpoint;
 
     // Return The JWT Middleware
     return (store) => (next) => (action) => {
-        let META = action.meta || {};
-        let headers = META.headers || {};
+        let META = action.request;
 
-        if(META.type !== 'api')
+        if(META === undefined || META === null)
             return next(action);
+        
+        let metaHeaders = META.headers || {};
 
         let refreshToken = cookieHelper.getCookie('refresh');
         if(!refreshToken)
             return next({
-                type: configs.LOGIN_REDIRECT_TYPE, //makes sure the user redirects to login page
-                payload: action.payload
+                type: "authorization failed", //makes sure the user redirects to login page
+                payload: "refresh token unavailable"
             });
 
         let accessToken = cookieHelper.getCookie('access');
@@ -29,13 +30,19 @@ var CreateJwtMiddleware = ( configs ) => {
                     return axios.post(refresh_endpoint, { refresh: refreshToken })
                             .then( ({data}) => {
                                 if(data.access){
-                                    setCookie('access', data.access, configs.accessToken_expire_time)
+                                    setCookie('access', data.access, configs.accessTokenExpireTime)
                                     dispatch(action)
                                 }
                                 else
-                                    dispatch({type: configs.LOGIN_FAILED_TYPE})
+                                    dispatch({
+                                        type: "authorization failed",
+                                        payload: "failed to fetch new access token"
+                                    })
                             })
-                            .catch( error => dispatch({ type: configs.LOGIN_FAILED_TYPE, payload: error }))
+                            .catch( error => dispatch({ 
+                                type: "authorization failed",
+                                payload: "failed to fetch new access token"
+                            }))
                 }
             )
         
@@ -43,15 +50,20 @@ var CreateJwtMiddleware = ( configs ) => {
             method: META.method,
             url: META.url,
             data: META.data,
-            headers: { 'Authorization': `Bearer ${accessToken}`, ...headers }
+            headers: { 'Authorization': `Bearer ${accessToken}`, ...metaHeaders }
         })
 
         // response handled by then function
-        if(typeof(META.then) === "function")
+        if(typeof(action.responseHandler) === "function")
             return next((dispatch) => {
                     if(action.loadingType)
                         dispatch({type: action.loadingType})
-                    return request.then( response => { META.then(response, true); dispatch({type: "simple-JWT Middleware executed then function"}) } )
+                    return request.then( response => { 
+                                            META.then(response, true);
+                                            dispatch({
+                                                type: "simple-JWT Middleware executed then function"}) 
+                                            }
+                                        )
                                 .catch( error => { META.then(error, false); dispatch({type: "simple-JWT Middleware executed then function (with Failed Response)"}) } )
                     }
             )
@@ -60,7 +72,7 @@ var CreateJwtMiddleware = ( configs ) => {
             return next((dispatch) => {
                     if(action.loadingType)
                         dispatch({type: action.loadingType})
-                    return request.then( ({data}) => next({ type: action.type, payload: data }) )
+                    return request.then( ({data}) => next({ type: action.successType, payload: data }) )
                                     .catch( error => dispatch({ type: action.failedType, payload: error }))
                 }
             )
