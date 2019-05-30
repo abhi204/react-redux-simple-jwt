@@ -4,7 +4,7 @@ A DEAD Simple redux middleware for JWT auth based react applications.
 **Additional Packages required**:
 - axios: 0.18.0 (or above)
 - Redux-thunk: 2.3.0 (or above)
-###### Note: Redux-thunk must be included in the middleware chain ([see Installation](#Installation_11))
+###### Note: Redux-thunk must be included in the middleware chain ([see Installation](#Installation))
 
 # Why do I need It?
 React-redux-simple-jwt (R2SJ for short) allows you to use JWT tokens in react-redux app by attaching access token to Authorization Header of the request being sent to API server.
@@ -62,7 +62,7 @@ The main problem is to include access token in this request's header. This is be
 
 In order to use R2SJ, action creator must return a ***request-object***. This object includes all the necessary details required by R2SJ middleware to create the request. The best thing about this is that refreshing and attaching access token to request header is now managed by R2SJ itself.
 Request is made  and the response is dispatched to reducers.
-**(R2SJ can also pass the server response to a function instead. [See Here](#Passing_response_to_function_instead_of_reducers_128) )**
+**(R2SJ can also pass the server response to a function instead. [See Here](#Passing_response_to_function_instead_of_reducers) )**
 ##### Example Scenerio
 * *Without R2SJ (Using redux thunk)*
 ```js
